@@ -8,6 +8,11 @@ apps leen para adaptar su comportamiento. Se definen en `hyprland.lua` con
 > Nota sobre GPU híbrida (tu laptop): la **iGPU Intel** alimenta el panel
 > interno; la **RTX 4060** se usa para render/descarga. Por eso hay que tener
 > cuidado con forzar todo hacia NVIDIA.
+>
+> **Portabilidad:** las variables de vídeo (`LIBVA_DRIVER_NAME`, `NVD_BACKEND`) ya
+> no se fuerzan a NVIDIA. `hyprland.lua` **detecta la GPU al arrancar** (vía `lspci`)
+> y aplica el backend solo si existe: NVIDIA → `nvidia`+`direct`, AMD → `radeonsi`,
+> Intel → `iHD`. Así el mismo dotfiles sirve en máquinas de cualquier marca.
 
 ## Variables activas
 
@@ -21,8 +26,8 @@ apps leen para adaptar su comportamiento. Se definen en `hyprland.lua` con
 | `QT_QPA_PLATFORMTHEME` | `qt5ct` | Tema/aspecto de apps Qt vía qt5ct. | Unificar apariencia Qt con el resto. |
 | `ELECTRON_OZONE_PLATFORM_HINT` | `auto` | Apps Electron usan Wayland nativo si está disponible (si no, XWayland). | Nitidez y menos lag de entrada en Discord/Spotify/VSCode. |
 | `MOZ_ENABLE_WAYLAND` | `1` | Firefox corre nativo en Wayland (no XWayland). | Mejor rendimiento y integración (p. ej. capturas, foco). |
-| `LIBVA_DRIVER_NAME` | `nvidia` | La decodificación de vídeo (VA-API) la hace la GPU NVIDIA (NVDEC). | Vídeo 4K/60 sin cargar la CPU; clave para mpvpaper (fondos animados). |
-| `NVD_BACKEND` | `direct` | Requisito del driver VA-API de NVIDIA para que `LIBVA_DRIVER_NAME=nvidia` descodifique de verdad. | Sin esta, la anterior no tiene efecto real. |
+| `LIBVA_DRIVER_NAME` | `nvidia`* | La decodificación de vídeo (VA-API) la hace la GPU. | Vídeo 4K/60 sin cargar la CPU; clave para mpvpaper. *Según GPU: `nvidia`/`radeonsi`/`iHD`. |
+| `NVD_BACKEND` | `direct`* | Requisito del driver VA-API de NVIDIA para descodificar de verdad. | *Solo se aplica si hay GPU NVIDIA. Sin esta, la anterior no tiene efecto real. |
 
 ## Variables comentadas (peligrosas en híbrido — actívalas con criterio)
 
