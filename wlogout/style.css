@@ -1,0 +1,68 @@
+* {
+	background-image: none;
+	box-shadow: none;
+}
+
+window {
+	background-color: rgba(51, 51, 51, 0.5);
+}
+
+
+button {
+	border-radius: 0;
+	border-color: #cccccc;
+  border-width: 2px 1px;
+  border-style: solid;
+	text-decoration-color: #c2c2c2;
+	color: #c2bdc9;
+	background-color: #2a2a2c;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 25%;
+  margin: 200px 0;
+
+}
+button:first-child{
+  border-radius: 100px 0 0 100px;
+  border-width: 2px 1 2px 2px;
+}
+button:last-child{
+  border-radius:  0 100px 100px 0;
+    border-width: 2px 2px 2px 1px;
+
+}
+
+button:focus, button:active, button:hover {
+	/* 20% Overlay 2, 80% mantle */
+	background-color: rgb(66, 67, 71);
+	outline-style: none;
+}
+
+
+#lock {
+    background-image: url("./icons/lock.png");
+}
+
+#logout {
+    background-image: url("./icons/logout.png");
+}
+
+#suspend {
+    background-image: url("./icons/suspend.png");
+}
+
+#hibernate {
+    background-image: url("./icons/hibernate.png");
+}
+
+#shutdown {
+    background-image: url("./icons/shutdown.png");
+}
+
+#reboot {
+    background-image: url("./icons/reboot.png");
+}
+
+button {
+  color: #c2bdc9;
+}

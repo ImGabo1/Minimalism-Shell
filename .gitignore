@@ -1,0 +1,5 @@
+*.bak
+*.orig
+backup-*/
+*.pyc
+.DS_Store

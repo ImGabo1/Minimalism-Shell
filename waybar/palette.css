@@ -1,0 +1,36 @@
+/* ============================================================
+   Minimalism Shell — Paleta canónica
+   ------------------------------------------------------------
+   Identidad: ESCALA DE GRISES. Derivada de Catppuccin Mocha,
+   pero con los acentos de color eliminados y los grises
+   afinados (ver valores "sintonizados" abajo).
+   Fuente de verdad para waybar, rofi, kitty, wlogout y swaync.
+
+   Tokens = 14 (los que realmente usa el proyecto).
+   Los colores Mocha originales (rosewater, mauve, peach, blue…)
+   NO se usan y se han eliminado.
+   ============================================================ */
+
+/* --- Fondos (capas oscuras) ------------------------------ */
+@define-color crust   #11111b;  /* capa más oscura (bordes/barra) */
+@define-color mantle  #181825;
+@define-color base    #1e1e2e;  /* fondo base de superficies */
+
+/* --- Superficies (elementos UI) --------------------------- */
+@define-color surface0 #8c8c8c;  /* sintonizado: gris puro (hover/fondos de módulo) */
+@define-color surface1 #45475a;
+@define-color surface2 #585b70;
+
+/* --- Texto ------------------------------------------------ */
+@define-color text    #ffffff;  /* sintonizado: blanco puro (texto principal) */
+@define-color subtext1 #bac2de; /* texto secundario */
+@define-color subtext0 #a6adc8; /* texto terciario / atenuado */
+
+/* --- Translúcidos (capas de la barra) --------------------- */
+@define-color crust-o rgba(17, 17, 27, 0.2);  /* fondo translúcido de módulos */
+@define-color text-o  rgba(205, 214, 244, 0.2);
+
+/* --- Acentos de estado (los únicos colores, uso puntual) -- */
+@define-color red     #f38ba8;  /* error / desconectado / rendimiento */
+@define-color green   #a6e3a1;  /* conectado / ahorro de energía */
+@define-color sapphire #74c7ec; /* estado equilibrado */

@@ -1,0 +1,216 @@
+@import "./palette.css";
+
+* {
+  border: none;
+  border-radius: 0px;
+  font-family: JetBrainsMono Nerd Font Propo;
+  font-size: 14px;
+  font-style: normal;
+  transition: all 0.2s ease;
+  min-width: 8px;
+  min-height: 0px;
+  color: @text;
+}
+
+window#waybar {
+  background: @crust-o;
+}
+
+/* COMMON */
+#waybar > * {
+  padding: 1px 0;
+}
+
+/* Reducimos el margen vertical global para que la barra se compacte hacia arriba */
+#bluetooth,
+#custom-swaync-client,
+#clock,
+#network,
+#power-profiles-daemon,
+#custom-brightness,
+#tray, 
+#pulseaudio,
+#mpris,
+#pulseaudio-slider,
+#workspaces,
+#window,
+#custom-menu,
+#pulseaudio.microphone,
+#custom-swaync-client, 
+#battery,
+#custom-power {
+  font-weight: 500;
+  margin: 2px 0; 
+}
+
+/* =============================================================================
+   MÓDULOS UNIFICADOS CON SOMBREADO (Mantenemos el tamaño, súper pegados)
+   ============================================================================= */
+#bluetooth,
+#network,
+#custom-brightness,
+#power-profiles-daemon,
+#pulseaudio,
+#custom-swaync-client,
+#battery,
+#pulseaudio.microphone,
+#custom-menu,              
+#mpris{   
+background-color: @crust-o;
+border-radius: 10px;
+padding: 4px 12px;       
+margin: 1px 1px; /* Separación milimétrica */
+}
+ 
+
+/* =============================================================================
+   MÓDULOS SEPARADOS (Workspaces, Botón +, Window)
+   ============================================================================= */
+
+#workspaces {
+  color: @text;
+  background-color: @crust-o;
+  padding: 4px;
+  margin: 2px 1px; /* Alineado con los demás */
+  border-radius: 10px; 
+}
+
+#workspaces button {
+  border-radius: 10px;
+  margin: 0 1px;
+  font-weight: 900;
+}
+#workspaces button:last-child {
+  margin-right: 0;
+}
+#workspaces button:hover label,
+#workspaces button.active label {
+  color: @text;
+}
+#workspaces button.active {
+  background-color: @text-o;
+}
+
+/* ============================================================================= */
+
+#custom-add_workspace {
+  background-color: @crust-o; 
+  color: @text;
+  border-radius: 10px; 
+  padding: 4px 12px; /* Mismo relleno que los iconos para el sombreado */
+  margin: 2px 1px; 
+}
+
+#custom-add_workspace:hover {
+  background-color: @surface0; /* Efecto hover para que reaccione al ratón */
+}
+
+/* ============================================================================= */
+
+#window {
+  background-color: @crust-o;
+  color: @text;
+  border-radius: 0px; 
+  padding: 0px 0px;
+  margin: 0px 0px; 
+}
+
+/* =============================================================================
+   CONTROLADORES Y SLIDERS
+   ============================================================================= */
+#pulseaudio-slider {
+  padding: 0;
+  margin: 0 4px;
+}
+#pulseaudio-slider slider {
+  opacity: 1;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+  background-color: @text;
+  border-radius: 50%;
+}
+#pulseaudio-slider trough {
+  min-height: 10px;
+  min-width: 80px;
+  border-radius: 10px;
+  background: @text-o;
+}
+#pulseaudio-slider highlight {
+  min-width: 10px;
+  border-radius: 5px;
+  background: @surface0;
+}
+
+/* Hovers con fondo destacado */
+#custom-swaync-client:hover,
+#custom-menu:hover,
+#mpris:hover,
+#bluetooth:hover,
+#custom-brightness:hover,
+#pulseaudio:hover { 
+  background-color: @surface0; 
+}
+
+#network:hover { color: @green; background-color: @surface0; }
+#network.disabled:hover { color: @subtext0; }
+#network.disconnected:hover { color: @red; background-color: @surface0; }
+
+#power-profiles-daemon.performance:hover { color: @red; background-color: @surface0; }
+#power-profiles-daemon.balanced:hover { color: @sapphire; background-color: @surface0; }
+#power-profiles-daemon.power-saver:hover { color: @green; background-color: @surface0; }
+
+/* Reloj */
+#clock {
+  font-size: 16px;
+  font-weight: 900;
+  color: @text;
+  background-color: @crust-o;
+  padding: 4px 14px;
+  margin: 2px 1px; /* Alineado milimétrico */
+  border-radius: 10px;
+}
+#clock:hover {
+  color: @subtext1;
+  background-color: @surface0;
+}
+
+/* Botón de Apagado Tocado al Extremo Derecho */
+#custom-power {
+  background-color: @crust-o;
+  border-radius: 10px;
+  margin: 2px 12px 2px 1px; /* Mantiene su distancia de la esquina derecha */
+  padding: 4px 14px;
+}
+#custom-power:hover {
+  color: @red;
+  background-color: @surface0;
+}
+
+/* Tooltips */
+tooltip {
+  background-color: @crust-o;
+  color: transparent;
+  border-radius: 10px;
+  border: 2px solid @surface0;
+  padding: 2px;
+}
+tooltip label {
+  background-color: transparent;
+  color: @text;
+  font-size: 13px;
+}
+tooltip > * {
+  border-radius: 10px;
+}
+
+/* Tray */
+#tray {
+  background-color: @crust-o;
+  padding: 4px;
+  margin: 2px 1px;
+  border-radius: 10px;
+}
+#tray > * > * {
+  margin: 4px 0;
+}
