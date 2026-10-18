@@ -69,6 +69,7 @@ Individual options:
 - Existing configs are **backed up** to `~/.config/backup-dotfiles-<date>` before linking.
 - `install.sh` **detects your GPU** and installs the matching video backend.
 - **AUR** packages (`graphite-gtk-theme`, `tela-black-icon-theme`, `bibata-cursor-theme-bin`) are installed with your helper (`paru`/`yay`); `install.sh` does it automatically if you have one.
+- `install.sh` **partitions on its own**: anything that exists in your repos goes through `pacman`, anything that doesn't (e.g. `wlogout`/`waypaper` on vanilla Arch) goes to AUR. It never aborts because of a missing package.
 - The SDDM theme takes effect on your **next login**.
 
 ### 📋 Manual installation (full package list)
@@ -77,9 +78,9 @@ Everything validated on **CachyOS/Arch**. If you prefer to install it yourself:
 
 **Official repositories:**
 ```bash
-sudo pacman -S hyprland waybar rofi kitty wlogout swaync hyprshot satty \
+sudo pacman -S hyprland waybar rofi kitty swaync hyprshot satty \
   thunar tumbler ffmpegthumbnailer hyprpicker wl-clipboard jq imv \
-  swayosd udiskie waypaper polkit-kde-agent mpv ttf-jetbrains-mono-nerd
+  swayosd udiskie polkit-kde-agent mpv pciutils ttf-jetbrains-mono-nerd
 ```
 
 **Video driver (pick yours):**
@@ -89,12 +90,14 @@ sudo pacman -S intel-media-driver    # Intel
 # AMD → libva-mesa-driver (in the AUR, see below)
 ```
 
-**AUR** (requires `paru` or `yay`) — the look's theme, icons and cursor:
+**AUR** (requires `paru` or `yay`) — the look, `wlogout` and `waypaper`:
 ```bash
 paru -S graphite-gtk-theme tela-black-icon-theme bibata-cursor-theme-bin
+paru -S wlogout waypaper
 paru -S libva-mesa-driver   # only if your GPU is AMD
 ```
 
+> On **CachyOS**, `wlogout`/`waypaper` are also in the repos (`pacman -S`). On **vanilla Arch** they are AUR (that's why they're not in the list above).
 > `waybar` and `satty` come from the official repos; `waybar-git`/`satty-git` are optional AUR alternatives.
 
 ### Does it work on any distro?
