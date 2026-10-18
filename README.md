@@ -42,8 +42,8 @@
 
 ## 💾 Consumo de RAM
 
-El shell entero (compositor + barra), en reposo y sin apps abiertas: **~340 MB**.
-Ligero: sobre una base de 8 GB deja ~7.5 GB libres. Cada app que abras suma su propia RAM.
+El shell entero (compositor + barra), en reposo y sin apps abiertas: **~170 MB**.
+Muy ligero: sobre una base de 8 GB deja ~7.8 GB libres. Cada app que abras suma su propia RAM.
 
 ## 📦 Instalación
 
