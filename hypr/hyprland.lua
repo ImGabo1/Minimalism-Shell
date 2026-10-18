@@ -29,7 +29,7 @@ hl.monitor({
 -- resolución/tasa preferidas. El de arriba (por desc) mantiene sus 165Hz.
 hl.monitor({
     output   = "",
-    mode     = "preferred",
+    mode     = "highres",
     position = "auto",
     scale    = "auto",
 })
@@ -59,14 +59,37 @@ hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
 hl.env("QT_QPA_PLATFORMTHEME", "qt5ct")
 
--- NVIDIA + Wayland (GPU híbrida: Intel iGPU + RTX 4060 dGPU)
--- Detalle de cada una en docs/VARIABLES-ENTORNO.md
+-- Wayland (general): siempre activo, sea cual sea la GPU.
+-- Detalle de cada variable en docs/VARIABLES-ENTORNO.md
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto") -- Electron (Discord/Spotify/Code) usa Wayland nativo
 hl.env("MOZ_ENABLE_WAYLAND", "1")              -- Firefox usa Wayland nativo
-hl.env("LIBVA_DRIVER_NAME", "nvidia")          -- decodificación de vídeo por NVDEC (GPU)
-hl.env("NVD_BACKEND", "direct")                -- requisito para que la anterior funcione
--- En laptops híbridos estas dos pueden dar pantalla negra si la iGPU Intel alimenta
--- el panel. Actívalas solo si ves artefactos/crashes al abrir apps con OpenGL:
+
+-- Detección de GPU en tiempo de ejecución (portabilidad entre equipos).
+-- Aplica el backend de vídeo SOLO si la GPU existe: el mismo dotfiles sirve en
+-- máquinas NVIDIA, AMD o Intel sin forzar drivers ajenos (evita pantalla negra).
+local function detect_gpu()
+    local ok, proc = pcall(io.popen, "lspci 2>/dev/null")
+    if not ok or not proc then return "unknown" end
+    local out = (proc:read("*a") or ""):lower()
+    proc:close()
+    if out:find("nvidia", 1, true) then return "nvidia" end
+    if out:find("amd", 1, true) or out:find("radeon", 1, true) then return "amd" end
+    if out:find("intel", 1, true) then return "intel" end
+    return "unknown"
+end
+
+local gpu = detect_gpu()
+if gpu == "nvidia" then
+    hl.env("LIBVA_DRIVER_NAME", "nvidia") -- decodificación de vídeo por NVDEC (GPU)
+    hl.env("NVD_BACKEND", "direct")       -- requisito para que la anterior funcione
+elseif gpu == "amd" then
+    hl.env("LIBVA_DRIVER_NAME", "radeonsi")
+elseif gpu == "intel" then
+    hl.env("LIBVA_DRIVER_NAME", "iHD")
+end
+
+-- En laptops híbridos NVIDIA estas dos pueden dar pantalla negra si la iGPU
+-- alimenta el panel. Actívalas solo si ves artefactos/crashes al abrir apps con OpenGL:
 -- hl.env("GBM_BACKEND", "nvidia-drm")
 -- hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 
@@ -265,7 +288,7 @@ hl.window_rule({ name = "float-overskride",    match = { class = "^(io.github.ka
 hl.window_rule({ name = "float-iwgtk",         match = { class = "^(org.twosheds.iwgtk)$" },                               float = true })
 hl.window_rule({ name = "float-steam",         match = { class = "^(steam_app_default)$" },                                float = true })
 hl.window_rule({ name = "float-xarchiver",     match = { class = "^(xarchiver)$" },                                        float = true })
-hl.window_rule({ name = "float-comscp",        match = { class = "^(com-scp-MainDashboard)$" },                            float = true })
+hl.window_rule({ name = "float-satty",        match = { class = "^(com.gabm.satty)$" },                            float = true })
 hl.window_rule({ name = "float-pip-browsers",  match = { class = "^(firefox)$|^(.*brave-browser.*)$", title = "^(Picture-in-Picture)$|^(Pantalla en pantalla)$|^(Imagen en imagen)$" }, float = true })
 hl.window_rule({ name = "float-library",       match = { class = "^(firefox)$|^(.*brave-browser.*)$", title = "^(Library)$" }, float = true })
 hl.window_rule({ name = "float-polkit",        match = { class = "^(org.kde.polkit-kde-authentication-agent-1)$" },        float = true })

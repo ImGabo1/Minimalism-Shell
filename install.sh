@@ -17,7 +17,7 @@ COMPONENTS=(hypr waybar rofi kitty wlogout swaync hyprshot)
 REPO_PKGS=(
   hyprland waybar rofi-wayland kitty wlogout swaync
   hyprshot satty thunar tumbler ffmpegthumbnailer
-  hyprpicker wl-clipboard jq
+  hyprpicker wl-clipboard jq imv
 )
 
 usage() {
@@ -28,6 +28,7 @@ Uso: ./install.sh [OPCIÓN]
   --dotfiles     Solo backup + symlinks de ~/.config
   --packages     Solo instala paquetes (repo)
   --sddm         Solo despliega el tema SDDM pixie
+  --gpu          Solo muestra la GPU detectada (sin instalar nada)
   --help         Esta ayuda
 
 Los paquetes AUR (satty, waybar-git, etc.) instálalos con tu helper (paru/yay).
@@ -65,14 +66,50 @@ link_dotfiles() {
   fi
 }
 
-install_packages() {
-  info "Instalando paquetes del repo"
-  if ! command -v pacman >/dev/null 2>&1; then
-    err "pacman no encontrado; instala los paquetes a mano"; return 1
+detect_gpu() {
+  local out; out="$(lspci 2>/dev/null || true)"
+  if   echo "$out" | grep -qi nvidia;        then echo "nvidia"
+  elif echo "$out" | grep -qiE 'amd|radeon'; then echo "amd"
+  elif echo "$out" | grep -qi intel;         then echo "intel"
+  else echo "unknown"
   fi
-  sudo pacman -S --needed --noconfirm "${REPO_PKGS[@]}"
-  ok "paquetes instalados"
-  warn "Recuerda los AUR: satty, waybar-git (si usas la versión -git)"
+}
+
+gpu_va_pkg() {
+  case "$1" in
+    nvidia) echo "libva-nvidia-driver" ;;
+    amd)    echo "libva-mesa-driver" ;;
+    intel)  echo "intel-media-driver" ;;
+    *)      echo "" ;;
+  esac
+}
+
+install_packages() {
+  local gpu; gpu="$(detect_gpu)"
+  info "GPU detectada: $gpu"
+
+  if command -v pacman >/dev/null 2>&1; then
+    local va; va="$(gpu_va_pkg "$gpu")"
+    local pkgs=("${REPO_PKGS[@]}")
+    [ -n "$va" ] && pkgs+=("$va")
+    info "Instalando (Arch/CachyOS): ${pkgs[*]}"
+    sudo pacman -S --needed --noconfirm "${pkgs[@]}"
+    ok "paquetes instalados"
+    warn "AUR: satty, waybar-git (si usas -git) — instálalos con paru/yay"
+  elif command -v apt-get >/dev/null 2>&1; then
+    warn "Debian/Ubuntu detectado. Este dotfiles está pensado para Arch/CachyOS."
+    warn "Los configs de ~/.config funcionan; instala Hyprland + dependencias a mano:"
+    echo "  hyprland waybar rofi kitty wlogout swaync hyprshot thunar tumbler"
+    echo "  ffmpegthumbnailer wl-clipboard jq imv"
+  elif command -v dnf >/dev/null 2>&1; then
+    warn "Fedora detectado. Este dotfiles está pensado para Arch/CachyOS."
+    warn "Los configs de ~/.config funcionan; instala Hyprland + dependencias a mano:"
+    echo "  hyprland waybar rofi kitty wlogout swaync hyprshot thunar tumbler"
+    echo "  ffmpegthumbnailer wl-clipboard jq imv"
+  else
+    err "gestor de paquetes no reconocido; instala las dependencias a mano"
+    return 1
+  fi
 }
 
 install_sddm() {
@@ -95,6 +132,7 @@ main() {
     --dotfiles) backup_dotfiles; link_dotfiles ;;
     --packages) install_packages ;;
     --sddm) install_sddm ;;
+    --gpu) info "GPU detectada: $(detect_gpu)" ;;
     "")
       backup_dotfiles
       link_dotfiles

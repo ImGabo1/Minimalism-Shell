@@ -20,12 +20,13 @@
 - **Compositor:** Hyprland (config en Lua, API `hl.*`).
 - **Barra:** Waybar con paleta de grises canónica (`palette.css`).
 - **Launcher:** Rofi (drun) en grises.
-- **Terminal:** Kitty con tema desaturado.
+- **Terminal:** Kitty con tema desaturado y copiar/pegar cómodo (seleccionar = copiar, clic central = pegar).
 - **Notificaciones:** SwayNC recoloreado a grises (rojo solo en alertas).
 - **Capturas:** `hyprshot` + `satty` vía un único comando `screenshot`.
+- **Visor de imágenes:** `imv` (ligero, nativo Wayland).
 - **Login:** SDDM con tema Pixie en grises y fondo propio.
 - **Multi-monitor** con regla *fallback* automática.
-- **Optimizado NVIDIA + Wayland** (laptop híbrida).
+- **GPU auto-detectada:** NVIDIA / AMD / Intel — el backend de vídeo se aplica solo si la GPU existe (portátil entre equipos).
 
 > **Fase actual — Baseline 1.0:** entorno estático estabilizado y empaquetado como
 > dotfiles. Los módulos dinámicos en TypeScript (Topbar, Launcher, Centro de Control)
@@ -39,12 +40,24 @@
 |---|---|
 | _(pendiente)_ | _(pendiente)_ |
 
+## 💾 Consumo de RAM
+
+Medido en reposo (solo el shell, sin apps abiertas):
+
+| Componente | RAM |
+|---|---|
+| Hyprland (compositor) | ~265 MB |
+| Waybar (barra) | ~76 MB |
+| **Total del shell** | **~340 MB** |
+
+Ligero: deja ~7.5 GB libres de una base de 8 GB. Cada app que abras suma su propia RAM.
+
 ## 📦 Instalación
 
-Requiere CachyOS/Arch con Hyprland.
+**Requisitos:** CachyOS/Arch (o cualquier derivo de Arch) con **Hyprland** instalado.
 
 ```bash
-git clone https://github.com/<tu-usuario>/minimalism-shell.git ~/minimalism-shell
+git clone https://github.com/ImGabo1/Minimalism-Shell.git ~/minimalism-shell
 cd ~/minimalism-shell
 ./install.sh
 ```
@@ -55,17 +68,26 @@ Opciones individuales:
 ./install.sh --dotfiles   # solo symlinks de ~/.config (+ backup previo)
 ./install.sh --packages   # solo paquetes del repo
 ./install.sh --sddm       # solo despliega el tema SDDM
+./install.sh --gpu        # solo muestra la GPU detectada
 ```
 
 - Las configs existentes se **respaldan** en `~/.config/backup-dotfiles-<fecha>` antes de enlazar.
+- `install.sh` **detecta tu GPU** e instala el backend de vídeo correspondiente.
 - Los paquetes **AUR** (`satty`, `waybar-git`, …) instálalos con tu helper (`paru`/`yay`).
 - El tema SDDM surte efecto en el **próximo login**.
+
+### ¿Sirve en cualquier distro?
+
+Los **configs** (`~/.config/...`) funcionan en cualquier distro con Hyprland + Wayland.
+El `install.sh` está pensado para **Arch/CachyOS** (`pacman`): en Debian/Fedora detecta el
+gestor, no rompe, e imprime la lista de paquetes para instalarlos a mano. GPU y detección
+funcionan en todas.
 
 ## 🗂️ Estructura
 
 ```
-minimalism-shell/
-├── install.sh          # instalador (backup + symlinks + paquetes + SDDM)
+Minimalism-Shell/
+├── install.sh          # instalador (backup + symlinks + paquetes + SDDM + GPU)
 ├── hypr/               # Hyprland (hyprland.lua, hypridle, hyprlock)
 ├── waybar/             # barra (config.jsonc, palette.css, style.css)
 ├── rofi/               # launcher (config.rasi, theme.rasi)
@@ -86,8 +108,8 @@ color eliminados y los grises afinados. La fuente de verdad es
 
 ## 🙏 Créditos
 
-- **[Haishi](https://github.com/)** — inspiración principal (SwayNC y estética).
+- **Haishi** — inspiración principal (SwayNC y estética).
 - **[HyDE](https://github.com/hyprdot/HyDE)** — enfoque de dotfiles y estructura.
-- **[Celestia](https://github.com/)** — inspiración de diseño.
-- **[Pixie SDDM](https://github.com/)** — tema de login base.
+- **Celestia** — inspiración de diseño.
+- **Pixie SDDM** — tema de login base.
 - **[Catppuccin](https://catppuccin.com)** — paleta de la que deriva la escala de grises.
