@@ -42,15 +42,8 @@
 
 ## 💾 Consumo de RAM
 
-Medido en reposo (solo el shell, sin apps abiertas):
-
-| Componente | RAM |
-|---|---|
-| Hyprland (compositor) | ~265 MB |
-| Waybar (barra) | ~76 MB |
-| **Total del shell** | **~340 MB** |
-
-Ligero: deja ~7.5 GB libres de una base de 8 GB. Cada app que abras suma su propia RAM.
+El shell entero (compositor + barra), en reposo y sin apps abiertas: **~340 MB**.
+Ligero: sobre una base de 8 GB deja ~7.5 GB libres. Cada app que abras suma su propia RAM.
 
 ## 📦 Instalación
 
