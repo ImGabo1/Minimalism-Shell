@@ -11,6 +11,8 @@
 
 *Identidad visual en escala de grises · TypeScript/AGS en camino*
 
+**Idiomas: 🇪🇸 Español · [🇬🇧 English](README.en.md)**
+
 </div>
 
 ---
@@ -66,8 +68,34 @@ Opciones individuales:
 
 - Las configs existentes se **respaldan** en `~/.config/backup-dotfiles-<fecha>` antes de enlazar.
 - `install.sh` **detecta tu GPU** e instala el backend de vídeo correspondiente.
-- Los paquetes **AUR** (`satty`, `waybar-git`, …) instálalos con tu helper (`paru`/`yay`).
+- Los paquetes **AUR** (`graphite-gtk-theme`, `tela-black-icon-theme`, `bibata-cursor-theme-bin`) se instalan con tu helper (`paru`/`yay`); `install.sh` lo hace solo si lo tienes.
 - El tema SDDM surte efecto en el **próximo login**.
+
+### 📋 Instalación manual (lista completa de paquetes)
+
+Todo validado en **CachyOS/Arch**. Si prefieres instalarlo tú mismo:
+
+**Repositorios oficiales:**
+```bash
+sudo pacman -S hyprland waybar rofi kitty wlogout swaync hyprshot satty \
+  thunar tumbler ffmpegthumbnailer hyprpicker wl-clipboard jq imv \
+  swayosd udiskie waypaper polkit-kde-agent mpv ttf-jetbrains-mono-nerd
+```
+
+**Driver de vídeo (elige el de tu GPU):**
+```bash
+sudo pacman -S libva-nvidia-driver   # NVIDIA
+sudo pacman -S intel-media-driver    # Intel
+# AMD → libva-mesa-driver (está en AUR, ver abajo)
+```
+
+**AUR** (necesitas `paru` o `yay`) — tema, iconos y cursor del look:
+```bash
+paru -S graphite-gtk-theme tela-black-icon-theme bibata-cursor-theme-bin
+paru -S libva-mesa-driver   # solo si tu GPU es AMD
+```
+
+> `waybar` y `satty` vienen de repo; `waybar-git`/`satty-git` son alternativas AUR opcionales.
 
 ### ¿Sirve en cualquier distro?
 
@@ -88,6 +116,8 @@ Minimalism-Shell/
 ├── wlogout/            # pantalla de salida (style.css, layout, icons)
 ├── swaync/             # notificaciones (colors.css, config.json, mpris.css)
 ├── hyprshot/           # configuración de capturas
+├── waypaper/           # gestor de fondos (config.ini)
+├── gtk-3.0/ gtk-4.0/   # theming GTK (selecciona tema Graphite-Dark)
 ├── sddm/pixie/         # tema de login (grises + fondo)
 ├── scripts/            # screenshot.sh (hyprshot + satty)
 └── docs/               # VARIABLES-ENTORNO.md

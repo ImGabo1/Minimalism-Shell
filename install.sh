@@ -12,12 +12,22 @@ info() { echo -e "${B}==>${N} $*"; }
 warn() { echo -e "${Y}==>${N} $*"; }
 err()  { echo -e "${R}ERROR:${N} $*" >&2; }
 
-COMPONENTS=(hypr waybar rofi kitty wlogout swaync hyprshot)
+COMPONENTS=(hypr waybar rofi kitty wlogout swaync hyprshot waypaper gtk-3.0 gtk-4.0)
 
+# Paquetes en repos oficiales (Arch/CachyOS)
 REPO_PKGS=(
-  hyprland waybar rofi-wayland kitty wlogout swaync
+  hyprland waybar rofi kitty wlogout swaync
   hyprshot satty thunar tumbler ffmpegthumbnailer
   hyprpicker wl-clipboard jq imv
+  swayosd udiskie waypaper polkit-kde-agent mpv
+  ttf-jetbrains-mono-nerd
+)
+
+# Paquetes AUR (se instalan con paru/yay si existe; si no, se listan)
+AUR_PKGS=(
+  graphite-gtk-theme
+  tela-black-icon-theme
+  bibata-cursor-theme-bin
 )
 
 usage() {
@@ -31,7 +41,8 @@ Uso: ./install.sh [OPCIÓN]
   --gpu          Solo muestra la GPU detectada (sin instalar nada)
   --help         Esta ayuda
 
-Los paquetes AUR (satty, waybar-git, etc.) instálalos con tu helper (paru/yay).
+Los paquetes AUR (graphite-gtk-theme, tela-black-icon-theme, bibata-cursor-theme-bin)
+se instalan solos si tienes paru/yay; si no, te los lista al final.
 EOF
 }
 
@@ -84,6 +95,22 @@ gpu_va_pkg() {
   esac
 }
 
+install_aur() {
+  local pkgs=("$@")
+  [ ${#pkgs[@]} -eq 0 ] && return 0
+  local helper=""
+  command -v paru >/dev/null 2>&1 && helper=paru
+  [ -z "$helper" ] && command -v yay >/dev/null 2>&1 && helper=yay
+  if [ -n "$helper" ]; then
+    info "Instalando AUR con $helper: ${pkgs[*]}"
+    "$helper" -S --needed --noconfirm "${pkgs[@]}"
+    ok "paquetes AUR instalados"
+  else
+    warn "Sin paru/yay — instala estos AUR a mano:"
+    printf '  %s\n' "${pkgs[@]}"
+  fi
+}
+
 install_packages() {
   local gpu; gpu="$(detect_gpu)"
   info "GPU detectada: $gpu"
@@ -91,21 +118,21 @@ install_packages() {
   if command -v pacman >/dev/null 2>&1; then
     local va; va="$(gpu_va_pkg "$gpu")"
     local pkgs=("${REPO_PKGS[@]}")
-    [ -n "$va" ] && pkgs+=("$va")
-    info "Instalando (Arch/CachyOS): ${pkgs[*]}"
+    local aur=("${AUR_PKGS[@]}")
+    # VA-API: nvidia/intel vienen de repo; amd (libva-mesa-driver) es AUR
+    if [ -n "$va" ]; then
+      if [ "$va" = "libva-mesa-driver" ]; then aur+=("$va"); else pkgs+=("$va"); fi
+    fi
+    info "Instalando (repo): ${pkgs[*]}"
     sudo pacman -S --needed --noconfirm "${pkgs[@]}"
-    ok "paquetes instalados"
-    warn "AUR: satty, waybar-git (si usas -git) — instálalos con paru/yay"
+    ok "paquetes de repo instalados"
+    install_aur "${aur[@]}"
   elif command -v apt-get >/dev/null 2>&1; then
     warn "Debian/Ubuntu detectado. Este dotfiles está pensado para Arch/CachyOS."
-    warn "Los configs de ~/.config funcionan; instala Hyprland + dependencias a mano:"
-    echo "  hyprland waybar rofi kitty wlogout swaync hyprshot thunar tumbler"
-    echo "  ffmpegthumbnailer wl-clipboard jq imv"
+    warn "Los configs de ~/.config funcionan; instala Hyprland + dependencias a mano (ver README)."
   elif command -v dnf >/dev/null 2>&1; then
     warn "Fedora detectado. Este dotfiles está pensado para Arch/CachyOS."
-    warn "Los configs de ~/.config funcionan; instala Hyprland + dependencias a mano:"
-    echo "  hyprland waybar rofi kitty wlogout swaync hyprshot thunar tumbler"
-    echo "  ffmpegthumbnailer wl-clipboard jq imv"
+    warn "Los configs de ~/.config funcionan; instala Hyprland + dependencias a mano (ver README)."
   else
     err "gestor de paquetes no reconocido; instala las dependencias a mano"
     return 1
