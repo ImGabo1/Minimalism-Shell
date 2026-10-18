@@ -68,6 +68,7 @@ Individual options:
 
 - Existing configs are **backed up** to `~/.config/backup-dotfiles-<date>` before linking.
 - `install.sh` **detects your GPU** and installs the matching video backend.
+- **Brave/Chromium on NVIDIA**: without `brave-flags.conf` video freezes on a static frame (EGLImage failures while presenting VAAPI frames). The repo ships it already fixed.
 - **AUR** packages (`graphite-gtk-theme`, `tela-black-icon-theme`, `bibata-cursor-theme-bin`) are installed with your helper (`paru`/`yay`); `install.sh` does it automatically if you have one.
 - `install.sh` **partitions on its own**: anything that exists in your repos goes through `pacman`, anything that doesn't (e.g. `wlogout`/`waypaper` on vanilla Arch) goes to AUR. It never aborts because of a missing package.
 - The SDDM theme takes effect on your **next login**.
@@ -121,6 +122,7 @@ Minimalism-Shell/
 ├── hyprshot/           # screenshot config
 ├── waypaper/           # wallpaper manager (config.ini)
 ├── gtk-3.0/ gtk-4.0/   # GTK theming (selects the Graphite-Dark theme)
+├── brave-flags.conf    # fix for Brave's frozen video on NVIDIA+Wayland
 ├── sddm/pixie/         # login theme (greys + background)
 ├── scripts/            # screenshot.sh (hyprshot + satty)
 └── docs/               # VARIABLES-ENTORNO.md

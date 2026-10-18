@@ -68,6 +68,7 @@ Opciones individuales:
 
 - Las configs existentes se **respaldan** en `~/.config/backup-dotfiles-<fecha>` antes de enlazar.
 - `install.sh` **detecta tu GPU** e instala el backend de vídeo correspondiente.
+- **Brave/Chromium en NVIDIA**: sin `brave-flags.conf` el vídeo se queda en una imagen fija (fallos de EGLImage al presentar frames VAAPI). El repo lo incluye ya resuelto.
 - Los paquetes **AUR** (`graphite-gtk-theme`, `tela-black-icon-theme`, `bibata-cursor-theme-bin`) se instalan con tu helper (`paru`/`yay`); `install.sh` lo hace solo si lo tienes.
 - `install.sh` **particiona solo**: lo que existe en tus repos va con `pacman`, lo que no (p. ej. `wlogout`/`waypaper` en Arch vanilla) va a AUR. Nunca aborta por un paquete que falte.
 - El tema SDDM surte efecto en el **próximo login**.
@@ -121,6 +122,7 @@ Minimalism-Shell/
 ├── hyprshot/           # configuración de capturas
 ├── waypaper/           # gestor de fondos (config.ini)
 ├── gtk-3.0/ gtk-4.0/   # theming GTK (selecciona tema Graphite-Dark)
+├── brave-flags.conf    # fix vídeo congelado de Brave en NVIDIA+Wayland
 ├── sddm/pixie/         # tema de login (grises + fondo)
 ├── scripts/            # screenshot.sh (hyprshot + satty)
 └── docs/               # VARIABLES-ENTORNO.md

@@ -29,6 +29,17 @@ apps leen para adaptar su comportamiento. Se definen en `hyprland.lua` con
 | `LIBVA_DRIVER_NAME` | `nvidia`* | La decodificación de vídeo (VA-API) la hace la GPU. | Vídeo 4K/60 sin cargar la CPU; clave para mpvpaper. *Según GPU: `nvidia`/`radeonsi`/`iHD`. |
 | `NVD_BACKEND` | `direct`* | Requisito del driver VA-API de NVIDIA para descodificar de verdad. | *Solo se aplica si hay GPU NVIDIA. Sin esta, la anterior no tiene efecto real. |
 
+### Nota: vídeo en Brave/Chromium (NVIDIA + Wayland)
+
+Con `LIBVA_DRIVER_NAME=nvidia`, Brave/Chromium decodifican en la GPU pero al
+presentar los frames vía EGLImage fallan en NVIDIA+Wayland
+(`eglCreateImage` → `0x3009`): **el vídeo se queda en una imagen fija** con el
+audio corriendo. Por eso el repo incluye `brave-flags.conf`
+(`~/.config/brave-flags.conf`) con `--disable-features=AcceleratedVideoDecodeLinuxGL`:
+Brave pasa a decodificar por software y el vídeo se reproduce con normalidad.
+mpv/Firefox no se ven afectados y siguen usando la GPU (verificado: mpv
+`Using hardware decoding (vaapi)`).
+
 ## Variables comentadas (peligrosas en híbrido — actívalas con criterio)
 
 | Variable | Valor | ¿Qué hace? | Riesgo en laptop híbrido |

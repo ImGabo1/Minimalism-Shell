@@ -12,7 +12,7 @@ info() { echo -e "${B}==>${N} $*"; }
 warn() { echo -e "${Y}==>${N} $*"; }
 err()  { echo -e "${R}ERROR:${N} $*" >&2; }
 
-COMPONENTS=(hypr waybar rofi kitty wlogout swaync hyprshot waypaper gtk-3.0 gtk-4.0)
+COMPONENTS=(hypr waybar rofi kitty wlogout swaync hyprshot waypaper gtk-3.0 gtk-4.0 brave-flags.conf)
 
 # Paquetes que queremos. Cada uno se instala por pacman si EXISTE en los repos
 # sincronizados; si no (p. ej. wlogout/waypaper en Arch vanilla), va a AUR.
@@ -73,11 +73,11 @@ link_dotfiles() {
   info "Creando symlinks $CONF/<comp> -> repo"
   mkdir -p "$CONF"
   for c in "${COMPONENTS[@]}"; do
-    if [ -d "$REPO/$c" ]; then
+    if [ -e "$REPO/$c" ]; then
       ln -sfn "$REPO/$c" "$CONF/$c"
       ok "link $c"
     else
-      warn "no hay dir $c en el repo, se omite"
+      warn "no hay $c en el repo, se omite"
     fi
   done
 
