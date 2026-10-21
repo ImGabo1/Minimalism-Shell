@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# brightness-util — brillo desde waybar (on-scroll) con OSD de swayosd.
+# Uso: brightness-util <disp|índice> <±delta%>
+#   brightness-util 0 10   sube 10%
+#   brightness-util 0 -10  baja 10%
+# Si el 1.er argumento no corresponde a un dispositivo backlight real
+# (/sys/class/backlight/<nombre>), se usa el backlight por defecto.
+set -euo pipefail
+
+dev="${1:-}"
+delta="${2:-10}"
+
+args=()
+if [ -n "$dev" ] && [ -d "/sys/class/backlight/$dev" ]; then
+  args=(-d "$dev")
+fi
+
+case "$delta" in
+  -*) brightnessctl "${args[@]}" set "${delta#-}%"- ;;
+   *) brightnessctl "${args[@]}" set "${delta}%"+ ;;
+esac
+
+# OSD: swayosd-client --brightness N fija el valor (mostrar el ya aplicado
+# es idempotente) y además dibuja el indicador.
+if command -v swayosd-client >/dev/null 2>&1; then
+  pct="$(brightnessctl "${args[@]}" -m | cut -d, -f4 | tr -d '%')"
+  swayosd-client --brightness "$pct" >/dev/null 2>&1 || true
+fi

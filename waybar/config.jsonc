@@ -77,7 +77,6 @@
     // }
   },
   "clock": {
-    "timezone": "America/Caracas",
     "format": "{:%I:%M}",
     "tooltip": true,
     "tooltip-format": "{:%A, %d %b %G}",

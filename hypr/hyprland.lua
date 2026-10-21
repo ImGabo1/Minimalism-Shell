@@ -1,7 +1,5 @@
 --===============================
 -- Hyprland config (Lua) v0.56.2
--- Migrado desde hyprlang 2026-09-15
--- Backup: ~/.config/hypr/backup-2026-09-15/
 --===============================
 
 --===============================
@@ -60,7 +58,6 @@ hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
 hl.env("QT_QPA_PLATFORMTHEME", "qt5ct")
 
 -- Wayland (general): siempre activo, sea cual sea la GPU.
--- Detalle de cada variable en docs/VARIABLES-ENTORNO.md
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto") -- Electron (Discord/Spotify/Code) usa Wayland nativo
 hl.env("MOZ_ENABLE_WAYLAND", "1")              -- Firefox usa Wayland nativo
 
@@ -145,7 +142,7 @@ hl.config({
 -- Aplicaciones
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"))
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + W", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(menu))
@@ -159,6 +156,7 @@ hl.bind("print",                        hl.dsp.exec_cmd("screenshot output"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen(), { description = "Toggle fullscreen" })
 hl.bind(mainMod .. " + H", hl.dsp.exec_cmd(games))
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(browser2))
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("waypaper")) -- gestor de fondos
 
 -- Navegación de workspaces
 for i = 1, 10 do
@@ -224,7 +222,7 @@ hl.bind("CONTROL + SHIFT + F3", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_S
 -- Música (locked)
 hl.bind("CONTROL + SHIFT + F8", hl.dsp.exec_cmd("playerctl next"),       { locked = true })
 hl.bind("CONTROL + SHIFT + F6", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-hl.bind("CONTROL + SHIFT + F7", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+hl.bind("CONTROL + SHIFT + F7", hl.dsp.exec_cmd("playerctl stop"),         { locked = true })
 hl.bind("CONTROL + SHIFT + F5", hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
 -- Brillo
